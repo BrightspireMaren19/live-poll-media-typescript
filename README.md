@@ -1,6 +1,6 @@
 # Live Polls for a Media Stream
 
-Infrai gives you one key for realtime and more. Run the sample from your terminal. It spins up a broadcast channel and publishes the initial poll state for a creator's stream.
+Infrai gives you one key for the whole realtime stack. Run the example from the command line. It opens a broadcast channel and pushes the first poll state for a creator's stream.
 
 ```sh
 npm install
@@ -8,20 +8,20 @@ export INFRAI_API_KEY=your-key
 npm start
 ```
 
-The service takes a zod-checked body containing `channel`, `account_id`, `question`, and at least two `options`. `startPoll` builds `stream-42`, then fires `poll.started` with all option counts at zero. That printed JSON is what a viewer client draws.
+The service takes a zod-validated body with `channel`, `account_id`, `question`, and at least two `options`. `startPoll` builds `stream-42`, then emits `poll.started` with every option at zero. The printed JSON is what a viewer client renders.
 
-`RealtimeClient` keeps the integration small: one key and one bill cover the realtime calls, while the code still treats the `{ok, data, error, metadata}` envelope as the source of truth. Business rejections come back as `InfraiError`. A 429 sleeps with exponential backoff and respects `Retry-After`.
+`RealtimeClient` keeps the integration small: one key and one bill cover the realtime calls, while the code still treats the `{ok, data, error, metadata}` envelope as the source of truth. Business rejections show up as `InfraiError`; a 429 waits with exponential backoff and honors `Retry-After`.
 
 ## Verify the decision
 
-The tight test feeds a fake client, hits the validated poll boundary, and asserts the published event plus zeroed counts:
+The focused test passes a fake client, exercises the validated poll boundary, and checks the published event and zeroed counts:
 
 ```sh
 npm test
 npm run typecheck
 ```
 
-This executable stays narrow on purpose. Wire vote aggregation in your app, then push updated `counts` via the same realtime client.
+The executable is intentionally narrow. Add vote aggregation in your app, then publish updated `counts` through the same realtime client.
 
 ## Files
 
@@ -31,7 +31,7 @@ This executable stays narrow on purpose. Wire vote aggregation in your app, then
 
 ## Setting up for real use: Live Poll Media Typescript
 
-The snippet above is deliberately minimal. You'll wire a few things for production. The notes below target Live Poll Media Typescript.
+The example above is intentionally minimal. A few things to wire up for real use: The details below apply to Live Poll Media Typescript.
 
 **Account & key**
 
